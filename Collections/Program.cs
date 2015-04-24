@@ -24,11 +24,11 @@ namespace Collections
 
         static void Main(string[] args)
         {
-            EnumerableExample();
-            //YieldExample();
-            //CollectionExample();
-            //ListExample();
-            //DictionaryExample();
+           // EnumerableExample();
+           // YieldExample();
+           // CollectionExample();
+           // ListExample();
+            DictionaryExample();
         }
 
         private static void EnumerableExample()
@@ -46,6 +46,7 @@ namespace Collections
             }
 
             //TODO 1: Change "BandsEnumerator" to enumerate from last element to first.
+
         }
 
         private static void YieldExample()
@@ -114,10 +115,12 @@ namespace Collections
             var bandsList = new List<Band>(BandsArray);
 
             //Custom comparer example
-            bandsList.Sort(new BasicBandsComparer());
-            //bandsList.Sort(new CustomBandsComparer(BandsCompareBy.Country));
+          //  bandsList.Sort(new BasicBandsComparer());
+          //  bandsList.Sort(new CustomBandsComparer(BandsCompareBy.Country));
             //bandsList.Sort(new CustomBandsComparer(BandsCompareBy.Name));
             //bandsList.Sort(new CustomBandsComparer(BandsCompareBy.AlbumCount));
+          
+            bandsList.Sort(new CustomBandsComparer(BandsCompareBy.NameLength));
 
             var index = 0;
             foreach (var band in bandsList)
@@ -169,19 +172,21 @@ namespace Collections
             foreach (var keyValuePair in bandsDictionary)
             {
                 //TODO 5: Change to display key and albums count
-                Console.WriteLine("Key: {0}, Value: {1}", keyValuePair.Key, keyValuePair.Value);
+                Console.WriteLine("Key: {0}, Value: {1}", keyValuePair.Key, keyValuePair.Value.Country);
             }
 
             Console.WriteLine();
 
             //Retrieving value based on key example
             var bandToGet = bandsDictionary["Muse"];
-            Console.WriteLine("{0} {1} {2}", bandToGet.Name, bandToGet.Genre, bandToGet.Country);
+          
+             Console.WriteLine("{0} {1} {2}", bandToGet.Name, bandToGet.Genre, bandToGet.Country);
 
             Console.WriteLine();
 
             //TODO 7: Check if key is present before adding/retrieving a new entry.
-            //bandsDictionary.Add("Muse", new Band("Muse", 6, "Alternative Rock", "England"));
+            if(!bandsDictionary.ContainsKey("Muse"))
+                bandsDictionary.Add("Muse", new Band("Muse", 6, "Alternative Rock", "England"));
             //Console.WriteLine(bandsDictionary["Guta"].Name);
         }
 
@@ -208,7 +213,11 @@ namespace Collections
 
         private static IEnumerable<Band> BritishBands(IEnumerable<Band> bandsList)
         {
-            yield return new Band("", 0, "", "");
+            foreach (var b in bandsList)
+            {
+                if(b.Country == "England")
+                yield return b;
+            }
         }
 
     }

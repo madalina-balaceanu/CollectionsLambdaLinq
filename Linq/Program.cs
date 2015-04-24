@@ -76,6 +76,7 @@ namespace Linq
             //Console.WriteLine();
             //GetSongsForAllBandsGroupJoin2();
 
+            StudioAlbumsGreaterThan(6);
             Console.ReadLine();
         }
 
@@ -118,9 +119,12 @@ namespace Linq
 
         public static void StudioAlbumsGreaterThan(int noOfAlbums)
         {
-            var myBands = GetBands();
+           // var myBands = GetBands().Where(b=>b.StudioAlbums > noOfAlbums);
 
-            //...Your code here....
+            var myBands = from band in GetBands()
+                          where band.StudioAlbums > noOfAlbums
+                          select band;
+
 
             ShowList(myBands);
         }

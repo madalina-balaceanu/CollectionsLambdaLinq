@@ -43,11 +43,16 @@ namespace Lambda
              */
 
             //TODO 4: Create an instance of NumberCheck (TODO 1)
-
+            NumberCheck eve = new NumberCheck(SpecialFunctions.Even);
             //TODO 5: Use function GetEvenNumbers to select the even numbers from numbersList collection
             List<int> numbersList = new List<int>(new int[] { 0, 1, 2, 6, 8, 9, 21, 24, 10 });
+            List<int> nr_even = SpecialFunctions.GetEvenNumbers(eve,numbersList);
 
-            //TODO 6: Print the resulted numbers
+            //TODO 6: Print the resulted numbersNumberCheck
+            foreach (var a in nr_even)
+            {
+                Console.WriteLine(a);
+            }
 
 
             Console.WriteLine();
@@ -83,7 +88,7 @@ namespace Lambda
             Console.Write("{0} - {1} = ", val1, val2);
             SpecialFunctions.ExecuteFunctionUsingFunc(SpecialFunctions.Diff, val1, val2);
 
-            List<int> numbersList = new List<int>(new int[] { 0, 1, 2, 6, 8, 9, 21, 24, 10 });
+            ArrayList numbersList = new ArrayList(new int[] { 0, 1, 2, 6, 8, 9, 21, 24, 10 });
             /**
              * TODO 7 
              * Create an instance of function created at TODO 2 and use it to print the odd numbers from numbersList collection
@@ -126,7 +131,7 @@ namespace Lambda
             Console.Write("{0} * {1} = ", val1, val2);
             SpecialFunctions.ExecuteFunction(prod_Function, val1, val2);
 
-            List<int> numbersList = new List<int>(new int[] { 0, 1, 2, 6, 8, 9, 21, 24, 10 });
+            ArrayList numbersList = new ArrayList(new int[] { 0, 1, 2, 6, 8, 9, 21, 24, 10 });
             /**
              * TODO 8 
              * Create an instance of function created at TODO 2 and use it to print the odd numbers from numbersList collection
@@ -190,14 +195,31 @@ namespace Lambda
              * Create a lambda expression which receives two parameters and returns the biggest number
              * and use it to extract the biggest number from numbersList collection.
              */
+            Func<int, int, int> lambdaMax = (x, y) =>
+            {
+                if (x >= y)
+                {
+                    return x;
+                }
+                else
+                {
+                    return y;
+                }
+            };
 
+            var max = lambdaMax(numbersList[0], numbersList[1]);
+            for (var i = 2; i < numbersList.Count; i++)
+            {
+                max =lambdaMax(max, numbersList[i]);
+            }
+             Console.WriteLine("Nr max este");
+            Console.WriteLine(max);
+                /**
+                 * TODO 10 (for home)
+                 * Use the lambda expression from TODO 9  to sort the collection ascending.
+                 */
 
-            /**
-             * TODO 10 (for home)
-             * Use the lambda expression from TODO 9  to sort the collection ascending.
-             */
- 
-            Console.WriteLine();
+                Console.WriteLine();
         }
 
         private static Func<int, int> GetIncFunc()
@@ -228,17 +250,17 @@ namespace Lambda
             //run Delegate example
             DelegateExample();
 
-            ////run Func Delegate example
-            //FuncDelegateExample();
+            //run Func Delegate example
+            FuncDelegateExample();
 
-            ////run Anonymous functions example
-            //AnonymousFunctExample();
+            //run Anonymous functions example
+            AnonymousFunctExample();
 
-            ////run Lambda expressions example
-            //LambdaExample();
+            //run Lambda expressions example
+            LambdaExample();
 
-            ////run Closure example
-            //ClosureExample();
+            //run Closure example
+            ClosureExample();
 
             Console.ReadKey();
         }
