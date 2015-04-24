@@ -59,10 +59,11 @@ namespace Lambda.Delegate
          * Create a function called GetEvenNumbers which uses an instance of a NumberCheck delegate and an aray list of integers.
          * The function will return a list with the even numbers.
          */
-        public static void ExecuteFunctionUsingEven( NumberCheck function, int nr)
+        public static void ExecuteFunctionUsingEven( Func<int,bool> function,int nr)
         {
-            bool result = function(nr);
-            Console.WriteLine(result);
+            var result = function(nr);
+            if(result)
+                Console.WriteLine(nr);
         }
 
         public static List<int> GetEvenNumbers(NumberCheck function, List<int> list)

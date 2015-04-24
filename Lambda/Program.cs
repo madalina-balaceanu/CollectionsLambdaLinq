@@ -88,12 +88,17 @@ namespace Lambda
             Console.Write("{0} - {1} = ", val1, val2);
             SpecialFunctions.ExecuteFunctionUsingFunc(SpecialFunctions.Diff, val1, val2);
 
-            ArrayList numbersList = new ArrayList(new int[] { 0, 1, 2, 6, 8, 9, 21, 24, 10 });
+           List<int> numbersList = new List<int>(new int[] { 0, 1, 2, 6, 8, 9, 21, 24, 10 });
             /**
              * TODO 7 
              * Create an instance of function created at TODO 2 and use it to print the odd numbers from numbersList collection
              */
-
+            Console.WriteLine("TASK 7 - HOME- Afisare nr pare utilizand TODO2");
+            Func<int, bool> even_Function = new Func<int,bool>(SpecialFunctions.Even);
+            foreach (var z in numbersList)
+            {
+               SpecialFunctions.ExecuteFunctionUsingEven(even_Function, z);
+            }
             Console.WriteLine();
         }
 
@@ -110,6 +115,10 @@ namespace Lambda
             PerformCalculation prod_Function = delegate(double var1, double var2)
             {
                 return var1 * var2;
+            };
+            Func<int,bool> even_Function = delegate(int nr)
+            {
+                return nr % 2 == 0 ? true:false ;
             };
 
 
@@ -131,12 +140,16 @@ namespace Lambda
             Console.Write("{0} * {1} = ", val1, val2);
             SpecialFunctions.ExecuteFunction(prod_Function, val1, val2);
 
-            ArrayList numbersList = new ArrayList(new int[] { 0, 1, 2, 6, 8, 9, 21, 24, 10 });
+            List<int> numbersList = new List<int>(new int[] { 0, 1, 2, 6, 8, 9, 21, 24, 10 });
             /**
              * TODO 8 
              * Create an instance of function created at TODO 2 and use it to print the odd numbers from numbersList collection
              */
-
+            Console.WriteLine("TASK 8 - HOME");
+            foreach (var z in numbersList)
+            {
+                SpecialFunctions.ExecuteFunctionUsingEven(even_Function, z);
+            }
             //Omitting the explicit creation of a Func instance
             Console.Write("{0} - {1} = ", val1, val2);
             SpecialFunctions.ExecuteFunctionUsingFunc(delegate(double var1, double var2) {return var1 + var2; },
@@ -219,6 +232,31 @@ namespace Lambda
                  * Use the lambda expression from TODO 9  to sort the collection ascending.
                  */
 
+            Console.WriteLine("TASK 10 - HOME");
+            bool swapped = true;
+            int j = 0;
+            int tmp;
+            int lenght = numbersList.Count;
+            while (swapped)
+            {
+                swapped = false;
+                j++;
+                for (int i = 0; i < lenght - j; i++)
+                {
+                    if (lambdaMax(numbersList[i],numbersList[i+1]) == numbersList[i])
+                    {
+                        tmp = numbersList[i];
+                        numbersList[i] = numbersList[i + 1];
+                        numbersList[i+1] = tmp;
+                        swapped = true;
+                    }
+                }
+            }
+
+            foreach (var z in numbersList)
+            {
+                Console.WriteLine(z);
+            }
                 Console.WriteLine();
         }
 
