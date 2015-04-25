@@ -36,9 +36,35 @@ namespace Linq
             };
         }
 
+        private static List<Membru> GetMembers()
+        {
+            return new List<Membru>
+            {
+                new Membru(1,1,"Membrul 1"),
+                new Membru(2,2,"Membrul 2"),
+                new Membru(3,3,"Membrul 3"),
+                new Membru(4,4,"Membrul 4"),
+                new Membru(5,5,"Membrul 5"),
+                new Membru(6,6,"Membrul 6"),
+                new Membru(7,7,"Membrul 7"),
+                new Membru(8,8,"Membrul 8"),
+                new Membru(9,1,"Membrul 9"),
+                new Membru(10,2,"Membrul 10"),
+                new Membru(11,3,"Membrul 11"),
+                new Membru(12,4,"Membrul 12"),
+                new Membru(13,5,"Membrul 13"),
+                new Membru(14,6,"Membrul 14"),
+                new Membru(15,7,"Membrul 15"),
+                new Membru(16,8,"Membrul 16"),
+                new Membru(17,5,"Membrul 17")
+            };
+        }
+
         private static readonly IEnumerable<Band> Bands = GetBands();
 
         private static readonly IEnumerable<Song> Songs = GetSongs();
+
+        private static readonly IEnumerable<Membru> Members = GetMembers();
 
         static void Main(string[] args)
         {
@@ -63,6 +89,12 @@ namespace Linq
             //GroupByCountryLync1();
             //Console.WriteLine();
             //GroupByCountryLync2();
+            Console.WriteLine("Sortare dupa gen de muzica");
+            GroupByGenreLync1();
+            Console.WriteLine();
+
+            GroupByGenreLync2();
+            Console.WriteLine();
 
             //GetSongsForBandsLinq1();
             //Console.WriteLine();
@@ -75,6 +107,36 @@ namespace Linq
             //GetSongsForAllBandsGroupJoin1();
             //Console.WriteLine();
             //GetSongsForAllBandsGroupJoin2();
+
+            Console.WriteLine("Grupare membri");
+
+            Console.WriteLine("GetMembersForBandsLinq1()");
+            GetMembersForBandsLinq1();
+            Console.WriteLine();
+
+            Console.WriteLine("GetMembersForBandsLinq2()");
+            GetMembersForBandsLinq2();
+            Console.WriteLine();
+
+
+            Console.WriteLine("GetMembersForAllBandsLinq1()");
+            GetMembersForAllBandsLinq1();
+            Console.WriteLine();
+
+            Console.WriteLine("GetMembersForAllBandsLinq2()");
+            GetMembersForAllBandsLinq2();
+            Console.WriteLine();
+
+            Console.WriteLine("GetMembersForAllBandsGroupJoin1()");
+            GetMembersForAllBandsGroupJoin1();
+            Console.WriteLine();
+
+            Console.WriteLine("GetMembersForAllBandsGroupJoin2()");
+            GetMembersForAllBandsGroupJoin2();
+            Console.WriteLine();
+
+
+
 
             StudioAlbumsGreaterThan(6);
             Console.ReadLine();
@@ -201,11 +263,30 @@ namespace Linq
         public static void GroupByGenreLync1()
         { 
             //.....Your code here......
+            var groupedBands =
+                        from band in Bands
+                        group band by band.Genre into bC
+                        select new
+                        {
+                            Genre = bC.Key,
+                            NumberOfBands = bC.Count()
+                        };
+
+            foreach (var group in groupedBands)
+            {
+                Console.WriteLine("Genre: " + group.Genre + " NumberOfBands: " + group.NumberOfBands);
+            }
         }
 
         public static void GroupByGenreLync2()
         {
             //.....Your code here......
+            var groupedBands = Bands.GroupBy(b => b.Genre).Select(g => new { Genre = g.Key, NumberOfBands = g.Count() });
+
+            foreach (var group in groupedBands)
+            {
+                Console.WriteLine("Genre: " + group.Genre + " NumberOfBands: " + group.NumberOfBands);
+            }
         }
         
         #endregion
@@ -324,6 +405,116 @@ namespace Linq
             foreach (var band in bands)
                 Console.WriteLine(band.ToString());
         }
+
+        #region GetMembersForAllBands()
+
+        //INNER JOIN
+        public static void GetMembersForBandsLinq1()
+        {
+            var bandMembers = from band in Bands
+                            join membru in Members on band.Id equals membru.BandId
+                            select new
+                            {
+                                Band = band.Name,
+                                membru = membru.Name
+                            };
+
+            foreach (var bandMember in bandMembers)
+            {
+                Console.WriteLine("Band: " + bandMember.Band + " Membru:" + bandMember.membru);
+            }
+        }
+
+        //INNER JOIN
+        public static void GetMembersForBandsLinq2()
+        {
+            var bandMembers = Bands.Join(Members, b => b.Id, s => s.BandId, (band, member) => new
+            {
+                Band = band.Name,
+                Member = member.Name
+            });
+
+            foreach (var bandMember in bandMembers)
+            {
+                Console.WriteLine("Band: " + bandMember.Band + " Member :" + bandMember.Member);
+            }
+        }
+
+        //LEFT JOIN
+        public static void GetMembersForAllBandsLinq1()
+        {
+            var bandMemebersResult = from band in Bands
+                                  join membru in Members on band.Id equals membru.BandId into bandMembers
+                                  from item in bandMembers.DefaultIfEmpty(new Membru(0,0,"-"))
+                                  select new
+                                  {
+                                      Band = band.Name,
+                                      Member = item.Name
+                                  };
+
+            foreach (var bandMember in bandMemebersResult)
+            {
+                Console.WriteLine("Band: " + bandMember.Band + " Member :" + bandMember.Member);
+            }
+        }
+
+        //LEFT JOIN
+        public static void GetMembersForAllBandsLinq2()
+        {
+            var bandMembersResult =
+                Bands.GroupJoin(
+                Members,
+                b => b.Id,
+                s => s.BandId,
+                (band, membru) => new
+                {
+                    Band = band.Name,
+                    Membru = membru.DefaultIfEmpty(new Membru(0, 0,"-"))
+                })
+                .SelectMany(a => a.Membru.Select(s => new { Band = a.Band, Membru = s.Name }));
+
+            foreach (var bandMember in bandMembersResult)
+            {
+                Console.WriteLine("Band: " + bandMember.Band + " Member:" + bandMember.Membru);
+            }
+
+        }
+
+        //GROUP JOIN
+        public static void GetMembersForAllBandsGroupJoin1()
+        {
+            var bandMembersResult = from band in Bands
+                                  join membru in Members on band.Id equals membru.BandId into bandMembers
+                                  select new { BandName = band.Name, Membru = bandMembers };
+
+            foreach (var band in bandMembersResult)
+            {
+                Console.WriteLine(band.BandName);
+
+                foreach (var membru in band.Membru)
+                {
+                    Console.WriteLine("---" + membru.Name);
+                }
+            }
+        }
+
+        //GROUP JOIN
+        public static void GetMembersForAllBandsGroupJoin2()
+        {
+            var bandMembersResult = Bands.GroupJoin(Members, b => b.Id, s => s.BandId, (band, members) => new { BandName = band.Name, Members = members });
+
+            foreach (var band in bandMembersResult)
+            {
+                Console.WriteLine(band.BandName);
+
+                foreach (var membru in band.Members)
+                {
+                    Console.WriteLine("---" + membru.Name);
+                }
+            }
+        }
+
+        #endregion
 
         //HOME TODO - de creat entitatea Membru (Id, BandId, Name)
         //De implementat toate metodele de la join, group join Ex: (GetMembersForBandsLinq1)
