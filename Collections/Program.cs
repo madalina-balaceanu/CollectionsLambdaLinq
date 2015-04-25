@@ -27,8 +27,8 @@ namespace Collections
            // EnumerableExample();
            // YieldExample();
            // CollectionExample();
-           // ListExample();
-            DictionaryExample();
+            ListExample();
+           // DictionaryExample();
         }
 
         private static void EnumerableExample()
@@ -46,6 +46,12 @@ namespace Collections
             }
 
             //TODO 1: Change "BandsEnumerator" to enumerate from last element to first.
+
+            //Folosire indexer din BandsEnumerable
+            for (int i = 0; i < bands.Count(); i++)
+            {
+                System.Console.WriteLine("Element #{0} = {1} \n", i, bands[i]);
+            }
 
         }
 
@@ -115,12 +121,15 @@ namespace Collections
             var bandsList = new List<Band>(BandsArray);
 
             //Custom comparer example
-          //  bandsList.Sort(new BasicBandsComparer());
-          //  bandsList.Sort(new CustomBandsComparer(BandsCompareBy.Country));
+            // bandsList.Sort(new BasicBandsComparer());
+            // bandsList.Sort(new CustomBandsComparer(BandsCompareBy.Country));
             //bandsList.Sort(new CustomBandsComparer(BandsCompareBy.Name));
             //bandsList.Sort(new CustomBandsComparer(BandsCompareBy.AlbumCount));
           
-            bandsList.Sort(new CustomBandsComparer(BandsCompareBy.NameLength));
+           //bandsList.Sort(new CustomBandsComparer(BandsCompareBy.NameLength));
+
+            Console.WriteLine("--------Sort()-----Collections - Extra-2");
+            bandsList.Sort();
 
             var index = 0;
             foreach (var band in bandsList)
